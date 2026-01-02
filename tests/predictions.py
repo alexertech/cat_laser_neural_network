@@ -1,150 +1,76 @@
 """
-Predicciones con la Red Neuronal del Gato
-==========================================
+Predicciones Interactivas: Gato vs Laser
+=========================================
 
-Aquí usamos la red ya entrenada para hacer predicciones individuales.
-Puedes ajustar los valores para experimentar con diferentes escenarios.
+Prueba tu propio escenario con la red entrenada.
 """
 
 import numpy as np
-from cat_nn import CatNeuralNetwork, load_and_prepare_data
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Pesos pre-entrenados (ejecuta cat_nn.py para ver como se obtienen)
+# Estos valores son el resultado del entrenamiento con seed=42
+np.random.seed(42)
+w1 = np.random.uniform(-1, 1, (3, 4))
+w2 = np.random.uniform(-1, 1, (4, 1))
+
+# Dataset de entrenamiento
+X = np.array([
+    [8, 0.2, 1], [2, 0.9, 0], [6, 0.5, 1], [1, 0.3, 0],
+    [7, 0.1, 0], [3, 0.8, 1], [5, 0.4, 1], [2, 0.2, 1],
+]) / np.array([10, 1, 1])
+y = np.array([[1], [0], [1], [0], [1], [0], [1], [0]])
+
+# Re-entrenar rapidamente (5000 epochs)
+for _ in range(5000):
+    hidden = sigmoid(np.dot(X, w1))
+    output = sigmoid(np.dot(hidden, w2))
+    error = y - output
+    d_output = error * (output * (1 - output))
+    d_hidden = d_output.dot(w2.T) * (hidden * (1 - hidden))
+    w2 += hidden.T.dot(d_output) * 0.8
+    w1 += X.T.dot(d_hidden) * 0.8
 
 
-def make_prediction(cat_nn, laser_x, laser_y, laser_speed, laser_direction, cat_energy):
+def predecir(horas_dormido, hambre, juguete_cerca):
     """
-    Hace una predicción para un escenario específico.
-    
-    Parámetros:
-    -----------
-    laser_x : float (0.0 a 1.0)
-        Posición horizontal del láser (0=izquierda, 1=derecha)
-    laser_y : float (0.0 a 1.0)
-        Posición vertical del láser (0=abajo, 1=arriba)
-    laser_speed : float (0.0 a 1.0)
-        Velocidad del láser (0=lento, 1=rápido)
-    laser_direction : float (0 a 360)
-        Dirección del movimiento en grados
-    cat_energy : float (0.0 a 1.0)
-        Nivel de energía del gato (0=dormido, 1=hiperactivo)
-    
-    Retorna:
-    --------
-    float : Probabilidad de captura exitosa (0.0 a 1.0)
-    """
-    # Preparamos el input como array
-    scenario = np.array([[laser_x, laser_y, laser_speed, laser_direction, cat_energy]])
-    
-    # Hacemos la predicción
-    probability = cat_nn.predict(scenario)[0][0]
-    
-    return probability
+    Predice si el gato atacara el laser.
 
-
-def interpret_result(probability):
+    Parametros:
+    - horas_dormido: 0-10 (cuantas horas durmio el gato)
+    - hambre: 0.0-1.0 (0=satisfecho, 1=muy hambriento)
+    - juguete_cerca: 0 o 1 (hay juguete/estimulo cerca?)
     """
-    Convierte la probabilidad numérica en algo más legible para humanos.
-    """
-    if probability >= 0.8:
-        return "Captura casi segura!"
-    elif probability >= 0.6:
-        return "Buenas probabilidades"
-    elif probability >= 0.4:
-        return "Puede ser..."
-    elif probability >= 0.2:
-        return "Poco probable"
-    else:
-        return "El gato ni lo intentara"
-
-
-def run_example_scenarios(cat_nn):
-    """
-    Prueba varios escenarios predefinidos para ver cómo se comporta la red.
-    """
-    print("\n" + "="*60)
-    print("ESCENARIOS DE PRUEBA: GATO vs LASER")
-    print("="*60 + "\n")
-    
-    scenarios = [
-        {
-            "name": "Gato descansado, láser lento y cercano",
-            "params": (0.5, 0.5, 0.2, 90, 0.9)
-        },
-        {
-            "name": "Gato cansado, láser rápido y lejano",
-            "params": (0.9, 0.9, 0.9, 270, 0.2)
-        },
-        {
-            "name": "Gato energético, láser medio",
-            "params": (0.4, 0.6, 0.5, 135, 0.8)
-        },
-        {
-            "name": "Láser extremadamente rápido",
-            "params": (0.7, 0.3, 0.95, 180, 0.7)
-        },
-        {
-            "name": "Gato en modo zen (energía baja)",
-            "params": (0.3, 0.4, 0.3, 45, 0.3)
-        }
-    ]
-    
-    for i, scenario in enumerate(scenarios, 1):
-        print(f"Escenario {i}: {scenario['name']}")
-        prob = make_prediction(cat_nn, *scenario['params'])
-        interpretation = interpret_result(prob)
-        
-        print(f"  Probabilidad de captura: {prob*100:.1f}%")
-        print(f"  Predicción: {interpretation}\n")
-
-
-def interactive_mode(cat_nn):
-    """
-    Modo interactivo: el usuario ingresa sus propios valores.
-    """
-    print("\n" + "="*60)
-    print("MODO INTERACTIVO")
-    print("="*60)
-    print("\nIngresa los valores para tu escenario:")
-    print("(Todos los valores entre 0.0 y 1.0, excepto dirección que es 0-360)\n")
-    
-    try:
-        laser_x = float(input("Posición X del láser (0.0-1.0): "))
-        laser_y = float(input("Posición Y del láser (0.0-1.0): "))
-        laser_speed = float(input("Velocidad del láser (0.0-1.0): "))
-        laser_direction = float(input("Dirección del láser (0-360 grados): "))
-        cat_energy = float(input("Energía del gato (0.0-1.0): "))
-        
-        prob = make_prediction(cat_nn, laser_x, laser_y, laser_speed, laser_direction, cat_energy)
-        interpretation = interpret_result(prob)
-        
-        print(f"\n{'='*60}")
-        print("RESULTADO")
-        print(f"{'='*60}")
-        print(f"Probabilidad de captura: {prob*100:.1f}%")
-        print(f"Predicción: {interpretation}\n")
-        
-    except ValueError:
-        print("\nError: Por favor ingresa valores numericos validos")
+    entrada = np.array([horas_dormido/10, hambre, juguete_cerca])
+    h = sigmoid(np.dot(entrada, w1))
+    prob = sigmoid(np.dot(h, w2))[0]
+    return prob
 
 
 if __name__ == "__main__":
-    print("Inicializando sistema de prediccion felina...")
+    print("="*50)
+    print("PREDICTOR DE COMPORTAMIENTO FELINO")
+    print("="*50)
+    print("\nIngresa las caracteristicas del gato:\n")
 
-    # Cargamos datos y entrenamos la red
-    X, y = load_and_prepare_data()
-    cat_nn = CatNeuralNetwork(input_size=5, hidden_size=8, learning_rate=0.1)
+    try:
+        horas = float(input("Horas dormidas (0-10): "))
+        hambre = float(input("Nivel de hambre (0.0-1.0): "))
+        juguete = int(input("Juguete cerca? (0=No, 1=Si): "))
 
-    print("Entrenando red neuronal...")
-    cat_nn.train(X, y, epochs=2000, verbose=False)
-    print("Red entrenada!\n")
-    
-    # Ejecutamos escenarios de ejemplo
-    run_example_scenarios(cat_nn)
-    
-    # Modo interactivo (opcional)
-    while True:
-        choice = input("\n¿Quieres probar tu propio escenario? (s/n): ").lower()
-        if choice == 's':
-            interactive_mode(cat_nn)
+        prob = predecir(horas, hambre, juguete)
+
+        print(f"\n{'='*50}")
+        print(f"Probabilidad de ataque: {prob:.1%}")
+
+        if prob > 0.7:
+            print("Prediccion: ATACA - El gato esta listo para cazar!")
+        elif prob > 0.3:
+            print("Prediccion: QUIZAS - Depende del humor del gato...")
         else:
-            print("\nHasta luego! Que tu gato capture muchos laseres.\n")
-            break
+            print("Prediccion: IGNORA - El gato prefiere dormir.")
+
+    except ValueError:
+        print("\nError: Ingresa valores numericos validos.")
