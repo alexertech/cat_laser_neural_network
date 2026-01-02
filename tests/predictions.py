@@ -45,15 +45,15 @@ def interpret_result(probability):
     Convierte la probabilidad numérica en algo más legible para humanos.
     """
     if probability >= 0.8:
-        return "🎯 Captura casi segura!"
+        return "Captura casi segura!"
     elif probability >= 0.6:
-        return "😼 Buenas probabilidades"
+        return "Buenas probabilidades"
     elif probability >= 0.4:
-        return "🤔 Puede ser..."
+        return "Puede ser..."
     elif probability >= 0.2:
-        return "😿 Poco probable"
+        return "Poco probable"
     else:
-        return "💤 El gato ni lo intentará"
+        return "El gato ni lo intentara"
 
 
 def run_example_scenarios(cat_nn):
@@ -61,7 +61,7 @@ def run_example_scenarios(cat_nn):
     Prueba varios escenarios predefinidos para ver cómo se comporta la red.
     """
     print("\n" + "="*60)
-    print("🐱 ESCENARIOS DE PRUEBA: GATO vs LÁSER")
+    print("ESCENARIOS DE PRUEBA: GATO vs LASER")
     print("="*60 + "\n")
     
     scenarios = [
@@ -101,7 +101,7 @@ def interactive_mode(cat_nn):
     Modo interactivo: el usuario ingresa sus propios valores.
     """
     print("\n" + "="*60)
-    print("🎮 MODO INTERACTIVO")
+    print("MODO INTERACTIVO")
     print("="*60)
     print("\nIngresa los valores para tu escenario:")
     print("(Todos los valores entre 0.0 y 1.0, excepto dirección que es 0-360)\n")
@@ -117,25 +117,25 @@ def interactive_mode(cat_nn):
         interpretation = interpret_result(prob)
         
         print(f"\n{'='*60}")
-        print(f"📊 RESULTADO")
+        print("RESULTADO")
         print(f"{'='*60}")
         print(f"Probabilidad de captura: {prob*100:.1f}%")
         print(f"Predicción: {interpretation}\n")
         
     except ValueError:
-        print("\n❌ Error: Por favor ingresa valores numéricos válidos")
+        print("\nError: Por favor ingresa valores numericos validos")
 
 
 if __name__ == "__main__":
-    print("🐱 Inicializando sistema de predicción felina...")
-    
+    print("Inicializando sistema de prediccion felina...")
+
     # Cargamos datos y entrenamos la red
     X, y = load_and_prepare_data()
     cat_nn = CatNeuralNetwork(input_size=5, hidden_size=8, learning_rate=0.1)
-    
-    print("🧠 Entrenando red neuronal...")
+
+    print("Entrenando red neuronal...")
     cat_nn.train(X, y, epochs=2000, verbose=False)
-    print("✅ Red entrenada!\n")
+    print("Red entrenada!\n")
     
     # Ejecutamos escenarios de ejemplo
     run_example_scenarios(cat_nn)
@@ -146,5 +146,5 @@ if __name__ == "__main__":
         if choice == 's':
             interactive_mode(cat_nn)
         else:
-            print("\n👋 ¡Hasta luego! Que tu gato capture muchos láseres.\n")
+            print("\nHasta luego! Que tu gato capture muchos laseres.\n")
             break

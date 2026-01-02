@@ -131,7 +131,7 @@ class CatNeuralNetwork:
         return self.forward(X)
 
 
-def load_and_prepare_data(filepath='data/cat_dataset.csv'):
+def load_and_prepare_data(filepath='data/data.csv'):
     """
     Carga y prepara los datos del CSV.
     
@@ -155,25 +155,25 @@ def train_cat_network(epochs=1000):
     
     Carga datos, crea la red, entrena, y muestra resultados.
     """
-    print("🐱 Cargando datos de comportamiento felino vs láser...")
+    print("Cargando datos de comportamiento felino vs laser...")
     X, y = load_and_prepare_data()
     
-    print(f"\n📊 Dataset: {len(X)} intentos de captura registrados")
-    print(f"   Capturas exitosas: {int(y.sum())}")
-    print(f"   Capturas fallidas: {int(len(y) - y.sum())}\n")
-    
-    print("🧠 Inicializando red neuronal...")
+    print(f"\nDataset: {len(X)} intentos de captura registrados")
+    print(f"  Capturas exitosas: {int(y.sum())}")
+    print(f"  Capturas fallidas: {int(len(y) - y.sum())}\n")
+
+    print("Inicializando red neuronal...")
     cat_nn = CatNeuralNetwork(input_size=5, hidden_size=8, learning_rate=0.1)
-    
-    print("🎯 Entrenando... (esto puede tomar unos segundos)\n")
+
+    print("Entrenando... (esto puede tomar unos segundos)\n")
     cat_nn.train(X, y, epochs=epochs, verbose=True)
-    
-    print("\n✅ Entrenamiento completado!")
+
+    print("\nEntrenamiento completado!")
     
     # Evaluación final
     predictions = cat_nn.predict(X)
     accuracy = np.mean((predictions > 0.5) == y)
-    print(f"\n📈 Precisión final: {accuracy * 100:.2f}%")
+    print(f"\nPrecision final: {accuracy * 100:.2f}%")
     
     return cat_nn
 
@@ -184,4 +184,4 @@ if __name__ == "__main__":
     """
     trained_network = train_cat_network(epochs=2000)
     
-    print("\n💾 Red entrenada lista para usar en predictions.py")
+    print("\nRed entrenada lista para usar en predictions.py")

@@ -1,17 +1,19 @@
 [project]
-name = "neural-network"
+name = "cat-laser"
 version = "0.1.0"
-description = ""
+description = "Red neuronal simple para predecir si un gato captura un laser"
 authors = [
-    {name = "Alex B",email = "ab@alexertech.com"}
+    {name = "Alex B", email = "ab@alexertech.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "numpy>=2.0.0",
+    "pandas>=2.0.0",
 ]
 
 [tool.poetry]
-packages = [{include = "neural_network", from = "src"}]
+packages = [{include = "cat_laser", from = "src"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
