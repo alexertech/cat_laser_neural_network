@@ -47,44 +47,32 @@ cat_laser/
 
 ```
 ❯ poetry run python src/cat_laser/cat_nn.py
+>>> ENTRENAMIENTO: 3 -> 4 -> 1 <<<
 
->>> INICIANDO ENTRENAMIENTO <<<
->>> PESOS INICIALES ALEATORIOS ESTABLECIDOS <<<
+Epoch     0 | Error: 0.5061 | Precision: 50%
+Epoch  2000 | Error: 0.2313 | Precision: 92%
+Epoch  4000 | Error: 0.1432 | Precision: 92%
 
-Epoch    0 | Error promedio: 0.5132
-            | Ejemplo: pred=0.309 real=1 (Gato descansado)
-Epoch 1000 | Error promedio: 0.0247
-            | Ejemplo: pred=0.998 real=1 (Gato descansado)
-Epoch 2000 | Error promedio: 0.0154
-            | Ejemplo: pred=0.999 real=1 (Gato descansado)
-Epoch 3000 | Error promedio: 0.0119
-            | Ejemplo: pred=0.999 real=1 (Gato descansado)
-Epoch 4000 | Error promedio: 0.0099
-            | Ejemplo: pred=0.999 real=1 (Gato descansado)
+>>> COMPLETO <<<
 
->>> ENTRENAMIENTO COMPLETO <<<
+ 1. ATACA (92.4%) | Real: ATACA [OK]  Descansado, sin hambre, juguete
+ 2. IGNORA ( 0.9%) | Real: IGNORA [OK]  Agotado, hambriento, sin estimulo
+ 3. ATACA (93.0%) | Real: ATACA [OK]  Muy descansado, satisfecho, juguete
+ 4. IGNORA ( 0.0%) | Real: IGNORA [OK]  Exhausto, mucha hambre
+ 5. ATACA (89.3%) | Real: ATACA [OK]  Energia media, juguete
+ 6. IGNORA ( 4.0%) | Real: IGNORA [OK]  Energia media, SIN juguete
+ 7. IGNORA ( 5.0%) | Real: IGNORA [OK]  Descansado, sin juguete *
+ 8. ATACA (99.3%) | Real: ATACA [OK]  Cansado, hambriento, juguete *
+ 9. IGNORA (13.1%) | Real: IGNORA [OK]  Buena energia, juguete *
+10. ATACA (94.4%) | Real: ATACA [OK]  Energia media-baja *
+11. ATACA (98.0%) | Real: ATACA [OK]  Muy descansado, juguete
+12. IGNORA ( 5.5%) | Real: IGNORA [OK]  Cansado, juguete
 
---- PREDICCIONES EN DATASET DE ENTRENAMIENTO ---
-Gato 1: ATACA (conf: 99.9%) | Real: ATACA [OK]
-         Descansado, sin hambre, juguete
-Gato 2: IGNORA (conf: 0.1%) | Real: IGNORA [OK]
-         Agotado, hambriento, sin juguete
-Gato 3: ATACA (conf: 99.4%) | Real: ATACA [OK]
-         Energia media, algo hambre, juguete
-Gato 4: IGNORA (conf: 1.8%) | Real: IGNORA [OK]
-         Casi dormido, poca hambre, sin juguete
-Gato 5: ATACA (conf: 99.9%) | Real: ATACA [OK]
-         Descansado, satisfecho, sin juguete
-Gato 6: IGNORA (conf: 0.1%) | Real: IGNORA [OK]
-         Cansado, hambriento, juguete
-Gato 7: ATACA (conf: 97.7%) | Real: ATACA [OK]
-         Energia media, hambre media, juguete
-Gato 8: IGNORA (conf: 1.9%) | Real: IGNORA [OK]
-         Cansado, sin hambre, juguete
+* = Contraintuitivo
 
---- GENERALIZANDO A CASOS NUEVOS ---
-Muy descansado, sin hambre, juguete cerca    : ATACA (conf: 100.0%)
-Exhausto y hambriento, sin juguete           : IGNORA (conf: 0.0%)
-Energia media, hambre media, sin juguete     : ATACA (conf: 99.3%)
+--- CASOS NUEVOS ---
+Descansado, algo hambre, juguete   : ATACA (72.7%)
+Cansado, poca hambre               : IGNORA (6.0%)
+Mucha hambre, juguete              : ATACA (99.6%)
 
 ```
